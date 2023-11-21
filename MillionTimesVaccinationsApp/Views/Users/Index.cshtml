@@ -1,0 +1,35 @@
+﻿@using MillionTimesVaccinationsApp.Controllers
+@inject UsersController UsersController
+
+@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+
+<p><a asp-action="Create">Create New</a></p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>UserName</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@(await UsersController.GetUserRoleAsync(user.Id))</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
+                    @if (user.UserName != User.Identity.Name)
+                    {
+                        <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

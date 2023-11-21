@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model IEnumerable<MillionTimesVaccinationsApp.Models.Vaccination>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create">Create New</a>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DoseNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalInstitution)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patient)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vaccine)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedicalInstitution.MedicalInstitutionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient.PatientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vaccine.VaccineId)
+            </td>
+            <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.VaccinationId">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.VaccinationId">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.VaccinationId">Delete</a>
+                    }
+                    
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
