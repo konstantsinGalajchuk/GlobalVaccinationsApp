@@ -22,10 +22,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Dose)
+                Dose value
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Vaccine)
+                Vaccine description
             </th>
             <th></th>
         </tr>
@@ -34,10 +34,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Dose.DoseId)
+                @Html.DisplayFor(modelItem => item.Dose.Value)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Vaccine.VaccineId)
+                @Html.DisplayFor(modelItem => item.Vaccine.Description)
             </td>
             <td>
                     @if (User.IsInRole("Admin"))

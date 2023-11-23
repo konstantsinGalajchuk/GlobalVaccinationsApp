@@ -28,7 +28,7 @@
                 @Html.DisplayNameFor(model => model.Manufacturer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Disease)
+                Disease name
             </th>
             <th></th>
         </tr>
@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.Manufacturer)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Disease.DiseaseId)
+                @Html.DisplayFor(modelItem => item.Disease.Name)
             </td>
             <td>
                     @if (User.IsInRole("Admin"))

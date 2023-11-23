@@ -20,6 +20,7 @@ string? dataConnection = builder.Configuration.GetConnectionString("DataConnecti
 builder.Services.AddDbContext<GlobalVaccinationsDbContext>(options =>
     options.UseSqlServer(dataConnection));
 
+builder.Services.AddSession();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<UsersController>();
@@ -41,6 +42,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

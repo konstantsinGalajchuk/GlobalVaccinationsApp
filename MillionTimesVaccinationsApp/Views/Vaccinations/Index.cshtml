@@ -28,13 +28,13 @@
                 @Html.DisplayNameFor(model => model.DoseNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MedicalInstitution)
+                MedicalInstitution name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Patient)
+                Patient name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Vaccine)
+                Vaccine description
             </th>
             <th></th>
         </tr>
@@ -49,13 +49,13 @@
                 @Html.DisplayFor(modelItem => item.DoseNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MedicalInstitution.MedicalInstitutionId)
+                @Html.DisplayFor(modelItem => item.MedicalInstitution.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Patient.PatientId)
+                @Html.DisplayFor(modelItem => item.Patient.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Vaccine.VaccineId)
+                @Html.DisplayFor(modelItem => item.Vaccine.Description)
             </td>
             <td>
                     @if (User.IsInRole("Admin"))

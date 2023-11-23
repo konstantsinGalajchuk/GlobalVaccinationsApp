@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MillionTimesVaccinationsApp.Data;
 using MillionTimesVaccinationsApp.Models;
+using MillionTimesVaccinationsApp.ViewModels;
 
 namespace MillionTimesVaccinationsApp.Controllers
 {
@@ -20,12 +21,77 @@ namespace MillionTimesVaccinationsApp.Controllers
             _context = context;
         }
 
-        // GET: Patients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? sex, string? city, string? region, string? fullName, int page = 1)
         {
-              return _context.Patients != null ? 
-                          View(await _context.Patients.ToListAsync()) :
-                          Problem("Entity set 'GlobalVaccinationsDbContext.Patients'  is null.");
+            IQueryable<Patient> filtredPatients = _context.Patients;
+
+            if (!string.IsNullOrEmpty(sex))
+            {
+                filtredPatients = filtredPatients.Where(p => p.Sex == sex);
+                HttpContext.Session.SetString("Sex", sex);
+                ViewData["Sex"] = sex;
+            }
+            else
+            {
+                ViewData["Sex"] = HttpContext.Session.GetString("Sex");
+            }
+
+            if (!string.IsNullOrEmpty(city))
+            {
+                filtredPatients = filtredPatients.Where(p => p.City == city);
+                HttpContext.Session.SetString("City", city);
+                ViewData["City"] = city;
+            }
+            else
+            {
+                ViewData["City"] = HttpContext.Session.GetString("City");
+            }
+
+            if (!string.IsNullOrEmpty(region))
+            {
+                filtredPatients = filtredPatients.Where(p => p.Region == region);
+                HttpContext.Session.SetString("Region", region);
+                ViewData["Region"] = region;
+            }
+            else
+            {
+                ViewData["Region"] = HttpContext.Session.GetString("Region");
+            }
+
+            if (!string.IsNullOrEmpty(fullName))
+            {
+                filtredPatients = filtredPatients.Where(p => p.FullName == fullName);
+                HttpContext.Session.SetString("FullName", fullName);
+                ViewData["FullName"] = fullName;
+            }
+            else
+            {
+                ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+            }
+
+            int pageSize = 20;
+            var count = await filtredPatients.CountAsync();
+            var items = await filtredPatients.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            PatientViewModel viewModel = new PatientViewModel
+            {
+                PageViewModel = pageViewModel,
+                Patients = items
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult ClearFilters()
+        {
+            HttpContext.Session.Clear();
+            ViewData["Sex"] = string.Empty;
+            ViewData["FullName"] = string.Empty;
+            ViewData["City"] = string.Empty;
+            ViewData["Region"] = string.Empty;
+
+            return RedirectToAction("Index");
         }
 
         // GET: Patients/Details/5
