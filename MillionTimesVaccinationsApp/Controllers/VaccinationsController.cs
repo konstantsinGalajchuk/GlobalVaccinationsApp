@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MillionTimesVaccinationsApp.Data;
 using MillionTimesVaccinationsApp.Models;
+using MillionTimesVaccinationsApp.ViewModels;
 
 namespace MillionTimesVaccinationsApp.Controllers
 {
@@ -21,10 +23,73 @@ namespace MillionTimesVaccinationsApp.Controllers
         }
 
         // GET: Vaccinations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? date, string? institutionName, string? patientName, int page = 1)
         {
-            var globalVaccinationsDbContext = _context.Vaccinations.Include(v => v.MedicalInstitution).Include(v => v.Patient).Include(v => v.Vaccine);
-            return View(await globalVaccinationsDbContext.ToListAsync());
+            IQueryable<Vaccination> filtredVaccinations = _context.Vaccinations
+                .Include(v => v.MedicalInstitution)
+                .Include(v => v.Patient)
+                .Include(v => v.Vaccine);
+
+            if (date != null)
+            {
+                filtredVaccinations = filtredVaccinations.Where(m => m.Date == date);
+                HttpContext.Session.SetString("VaccinationsDate", date.ToString());
+                DateTime dateValue = (DateTime)date;
+                ViewData["VaccinationsDate"] = dateValue.ToString("yyyy-MM-dd");
+            }
+            else
+            {
+                DateTime dateValue;
+                if (DateTime.TryParse(HttpContext.Session.GetString("VaccinationsDate"), out dateValue))
+                {
+                    ViewData["VaccinationsDate"] = dateValue.ToString("yyyy-MM-dd");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(institutionName))
+            {
+                filtredVaccinations = filtredVaccinations.Where(v => v.MedicalInstitution.Name == institutionName);
+                HttpContext.Session.SetString("VaccinationsInstitutionName", institutionName);
+                ViewData["VaccinationsInstitutionName"] = institutionName;
+            }
+            else
+            {
+                ViewData["VaccinationsInstitutionName"] = HttpContext.Session.GetString("VaccinationsInstitutionName");
+            }
+
+            if (!string.IsNullOrEmpty(patientName))
+            {
+                filtredVaccinations = filtredVaccinations.Where(v => v.Patient.FullName == patientName);
+                HttpContext.Session.SetString("VaccinationsPatientName", patientName);
+                ViewData["VaccinationsPatientName"] = patientName;
+            }
+            else
+            {
+                ViewData["VaccinationsPatientName"] = HttpContext.Session.GetString("VaccinationsPatientName");
+            }
+
+            int pageSize = 20;
+            var count = await filtredVaccinations.CountAsync();
+            var items = await filtredVaccinations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            VaccinationViewModel viewModel = new VaccinationViewModel
+            {
+                PageViewModel = pageViewModel,
+                Vaccinations = items
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult ClearFilters()
+        {
+            HttpContext.Session.Clear();
+            ViewData["VaccinationsDate"] = string.Empty;
+            ViewData["VaccinationsInstitutionName"] = string.Empty;
+            ViewData["VaccinationsPatientName"] = string.Empty;
+
+            return RedirectToAction("Index");
         }
 
         // GET: Vaccinations/Details/5

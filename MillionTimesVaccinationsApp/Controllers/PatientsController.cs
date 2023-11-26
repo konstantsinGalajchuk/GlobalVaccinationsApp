@@ -28,45 +28,45 @@ namespace MillionTimesVaccinationsApp.Controllers
             if (!string.IsNullOrEmpty(sex))
             {
                 filtredPatients = filtredPatients.Where(p => p.Sex == sex);
-                HttpContext.Session.SetString("Sex", sex);
-                ViewData["Sex"] = sex;
+                HttpContext.Session.SetString("PatientsSex", sex);
+                ViewData["PatientsSex"] = sex;
             }
             else
             {
-                ViewData["Sex"] = HttpContext.Session.GetString("Sex");
+                ViewData["PatientsSex"] = HttpContext.Session.GetString("PatientsSex");
             }
 
             if (!string.IsNullOrEmpty(city))
             {
                 filtredPatients = filtredPatients.Where(p => p.City == city);
-                HttpContext.Session.SetString("City", city);
-                ViewData["City"] = city;
+                HttpContext.Session.SetString("PatientsCity", city);
+                ViewData["PatientsCity"] = city;
             }
             else
             {
-                ViewData["City"] = HttpContext.Session.GetString("City");
+                ViewData["PatientsCity"] = HttpContext.Session.GetString("PatientsCity");
             }
 
             if (!string.IsNullOrEmpty(region))
             {
                 filtredPatients = filtredPatients.Where(p => p.Region == region);
-                HttpContext.Session.SetString("Region", region);
-                ViewData["Region"] = region;
+                HttpContext.Session.SetString("PatientsRegion", region);
+                ViewData["PatientsRegion"] = region;
             }
             else
             {
-                ViewData["Region"] = HttpContext.Session.GetString("Region");
+                ViewData["PatientsRegion"] = HttpContext.Session.GetString("PatientsRegion");
             }
 
             if (!string.IsNullOrEmpty(fullName))
             {
                 filtredPatients = filtredPatients.Where(p => p.FullName == fullName);
-                HttpContext.Session.SetString("FullName", fullName);
-                ViewData["FullName"] = fullName;
+                HttpContext.Session.SetString("PatientsFullName", fullName);
+                ViewData["PatientsFullName"] = fullName;
             }
             else
             {
-                ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+                ViewData["PatientsFullName"] = HttpContext.Session.GetString("PatientsFullName");
             }
 
             int pageSize = 20;
@@ -86,10 +86,10 @@ namespace MillionTimesVaccinationsApp.Controllers
         public IActionResult ClearFilters()
         {
             HttpContext.Session.Clear();
-            ViewData["Sex"] = string.Empty;
-            ViewData["FullName"] = string.Empty;
-            ViewData["City"] = string.Empty;
-            ViewData["Region"] = string.Empty;
+            ViewData["PatientsSex"] = string.Empty;
+            ViewData["PatientsFullName"] = string.Empty;
+            ViewData["PatientsCity"] = string.Empty;
+            ViewData["PatientsRegion"] = string.Empty;
 
             return RedirectToAction("Index");
         }

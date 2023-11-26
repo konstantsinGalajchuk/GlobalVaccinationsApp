@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MillionTimesVaccinationsApp.Data;
 using MillionTimesVaccinationsApp.Models;
+using MillionTimesVaccinationsApp.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MillionTimesVaccinationsApp.Controllers
 {
@@ -21,11 +24,65 @@ namespace MillionTimesVaccinationsApp.Controllers
         }
 
         // GET: MedicalInstitutions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? name, string? region, string? city, int page = 1)
         {
-              return _context.MedicalInstitutions != null ? 
-                          View(await _context.MedicalInstitutions.ToListAsync()) :
-                          Problem("Entity set 'GlobalVaccinationsDbContext.MedicalInstitutions'  is null.");
+            IQueryable<MedicalInstitution> filtredInstitutions = _context.MedicalInstitutions;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                filtredInstitutions = filtredInstitutions.Where(i => i.Name == name);
+                HttpContext.Session.SetString("InstitutionsName", name);
+                ViewData["InstitutionsName"] = name;
+            }
+            else
+            {
+                ViewData["InstitutionsName"] = HttpContext.Session.GetString("InstitutionsName");
+            }
+
+            if (!string.IsNullOrEmpty(region))
+            {
+                filtredInstitutions = filtredInstitutions.Where(i => i.Region == region);
+                HttpContext.Session.SetString("InstitutionsRegion", region);
+                ViewData["InstitutionsRegion"] = region;
+            }
+            else
+            {
+                ViewData["InstitutionsRegion"] = HttpContext.Session.GetString("InstitutionsRegion");
+            }
+
+            if (!string.IsNullOrEmpty(city))
+            {
+                filtredInstitutions = filtredInstitutions.Where(i => i.City == city);
+                HttpContext.Session.SetString("InstitutionsCity", city);
+                ViewData["InstitutionsCity"] = city;
+            }
+            else
+            {
+                ViewData["InstitutionsCity"] = HttpContext.Session.GetString("InstitutionsCity");
+            }
+
+            int pageSize = 20;
+            var count = await filtredInstitutions.CountAsync();
+            var items = await filtredInstitutions.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            MedicalInstitutionViewModel viewModel = new MedicalInstitutionViewModel
+            {
+                PageViewModel = pageViewModel,
+                MedicalInstitutions = items
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult ClearFilters()
+        {
+            HttpContext.Session.Clear();
+            ViewData["InstitutionsName"] = string.Empty;
+            ViewData["InstitutionsRegion"] = string.Empty;
+            ViewData["InstitutionsCity"] = string.Empty;
+
+            return RedirectToAction("Index");
         }
 
         // GET: MedicalInstitutions/Details/5

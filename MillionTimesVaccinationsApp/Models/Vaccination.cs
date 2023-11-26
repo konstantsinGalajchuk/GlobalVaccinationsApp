@@ -9,14 +9,20 @@ public partial class Vaccination
     [Key]
     public int VaccinationId { get; set; }
 
+    [Required]
     public int? VaccineId { get; set; }
 
+    [Required]
     public DateTime Date { get; set; }
 
+    [Required]
+    [RegularExpression(@"^\d{1,3}$", ErrorMessage = "The 'DoseNumber' field must contain numbers only.")]
     public int DoseNumber { get; set; }
 
+    [Required]
     public int? PatientId { get; set; }
 
+    [Required]
     public int? MedicalInstitutionId { get; set; }
 
     public virtual MedicalInstitution? MedicalInstitution { get; set; }

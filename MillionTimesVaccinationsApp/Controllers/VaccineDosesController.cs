@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MillionTimesVaccinationsApp.Data;
 using MillionTimesVaccinationsApp.Models;
+using MillionTimesVaccinationsApp.ViewModels;
 
 namespace MillionTimesVaccinationsApp.Controllers
 {
@@ -21,10 +22,24 @@ namespace MillionTimesVaccinationsApp.Controllers
         }
 
         // GET: VaccineDoses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var globalVaccinationsDbContext = _context.VaccineDoses.Include(v => v.Dose).Include(v => v.Vaccine);
-            return View(await globalVaccinationsDbContext.ToListAsync());
+            IQueryable<VaccineDose> filtredVaccineDoses = _context.VaccineDoses
+                .Include(v => v.Dose)
+                .Include(v => v.Vaccine);
+
+            int pageSize = 20;
+            var count = await filtredVaccineDoses.CountAsync();
+            var items = await filtredVaccineDoses.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            VaccineDoseViewModel viewModel = new VaccineDoseViewModel
+            {
+                PageViewModel = pageViewModel,
+                VaccineDoses = items
+            };
+
+            return View(viewModel);
         }
 
         // GET: VaccineDoses/Details/5

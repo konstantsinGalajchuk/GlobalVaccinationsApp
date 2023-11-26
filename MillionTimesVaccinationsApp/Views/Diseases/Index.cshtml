@@ -3,7 +3,7 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-@model IEnumerable<MillionTimesVaccinationsApp.Models.Disease>
+@model MillionTimesVaccinationsApp.ViewModels.DiseaseViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -11,6 +11,27 @@
 }
 
 <h1>Index</h1>
+
+<form method="get">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="code">Code</label>
+                <input value="@ViewData["DiseasesCode"]" type="text" class="form-control" id="code" name="code" placeholder="Code">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input value="@ViewData["DiseasesName"]" type="text" class="form-control" id="name" name="name" placeholder="Name">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-primary">Apply</button>
+        <button asp-action="ClearFilters" type="submit" class="btn btn-secondary">Clear</button>
+    </div>
+</form>
 
 <p>
     @if (User.IsInRole("Admin"))
@@ -22,16 +43,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Code)
+                Code
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Diseases) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Code)
@@ -51,3 +72,39 @@
 }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a asp-route-name="@ViewData["DiseasesName"]" asp-route-code="@ViewData["DiseasesCode"]"
+                   asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="page-link">&laquo;</a>
+            </li>
+        }
+        @for (int i = Model.PageViewModel.PageNumber; i < Model.PageViewModel.TotalPages && i < Model.PageViewModel.PageNumber + 3; i++)
+        {
+            @if (i == Model.PageViewModel.PageNumber)
+            {
+                <li class="page-item active">
+                    <a asp-route-name="@ViewData["DiseasesName"]" asp-route-code="@ViewData["DiseasesCode"]"
+                       asp-action="Index" asp-route-page="@i" class="page-link active">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a asp-route-name="@ViewData["DiseasesName"]" asp-route-code="@ViewData["DiseasesCode"]"
+                       asp-action="Index" asp-route-page="@i" class="page-link">@i</a>
+                </li>
+            }
+        }
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <li class="page-item">
+                <a asp-route-name="@ViewData["DiseasesName"]" asp-route-code="@ViewData["DiseasesCode"]"
+                   asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="page-link">&raquo;</a>
+            </li>
+        }
+    </ul>
+</nav>

@@ -3,7 +3,7 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-@model IEnumerable<MillionTimesVaccinationsApp.Models.MedicalInstitution>
+@model MillionTimesVaccinationsApp.ViewModels.MedicalInstitutionViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -11,6 +11,33 @@
 }
 
 <h1>Index</h1>
+ 
+<form method="get">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input value="@ViewData["InstitutionsName"]" type="text" class="form-control" id="name" name="name" placeholder="Name">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="region">Region</label>
+                <input value="@ViewData["InstitutionsRegion"]" type="text" class="form-control" id="region" name="region" placeholder="Region">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="city">City</label>
+                <input value="@ViewData["InstitutionsCity"]" type="text" class="form-control" id="city" name="city" placeholder="City">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-primary">Apply</button>
+        <button asp-action="ClearFilters" type="submit" class="btn btn-secondary">Clear</button>
+    </div>
+</form>
 
 <p>
     @if (User.IsInRole("Admin"))
@@ -22,28 +49,28 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Region)
+                Region
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.City)
+                City
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Street)
+                Street
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HouseNumber)
+                HouseNumber
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ApartmentNumber)
+                ApartmentNumber
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.MedicalInstitutions) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -75,3 +102,39 @@
 }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a asp-route-name="@ViewData["InstitutionsName"]" asp-route-region="@ViewData["InstitutionsRegion"]" asp-route-city="@ViewData["InstitutionsCity"]"
+                    asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="page-link">&laquo;</a>
+            </li>
+        }
+        @for (int i = Model.PageViewModel.PageNumber; i < Model.PageViewModel.TotalPages && i < Model.PageViewModel.PageNumber + 3; i++)
+        {
+            @if (i == Model.PageViewModel.PageNumber)
+            {
+                <li class="page-item active">
+                    <a asp-route-name="@ViewData["InstitutionsName"]" asp-route-region="@ViewData["InstitutionsRegion"]" asp-route-city="@ViewData["InstitutionsCity"]"
+                        asp-action="Index" asp-route-page="@i" class="page-link active">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a asp-route-name="@ViewData["InstitutionsName"]" asp-route-region="@ViewData["InstitutionsRegion"]" asp-route-city="@ViewData["InstitutionsCity"]"
+                        asp-action="Index" asp-route-page="@i" class="page-link">@i</a>
+                </li>
+            }
+        }
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <li class="page-item">
+                <a asp-route-name="@ViewData["InstitutionsName"]" asp-route-region="@ViewData["InstitutionsRegion"]" asp-route-city="@ViewData["InstitutionsCity"]"
+                    asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="page-link">&raquo;</a>
+            </li>
+        }
+    </ul>
+</nav>

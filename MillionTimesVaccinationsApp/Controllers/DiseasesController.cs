@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MillionTimesVaccinationsApp.Data;
 using MillionTimesVaccinationsApp.Models;
+using MillionTimesVaccinationsApp.ViewModels;
 
 namespace MillionTimesVaccinationsApp.Controllers
 {
@@ -21,11 +23,53 @@ namespace MillionTimesVaccinationsApp.Controllers
         }
 
         // GET: Diseases
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? code, string? name, int page = 1)
         {
-              return _context.Diseases != null ? 
-                          View(await _context.Diseases.ToListAsync()) :
-                          Problem("Entity set 'GlobalVaccinationsDbContext.Diseases'  is null.");
+            IQueryable<Disease> filtredDiseases = _context.Diseases;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                filtredDiseases = filtredDiseases.Where(d => d.Name == name);
+                HttpContext.Session.SetString("DiseasesName", name);
+                ViewData["DiseasesName"] = name;
+            }
+            else
+            {
+                ViewData["DiseasesName"] = HttpContext.Session.GetString("DiseasesName");
+            }
+
+            if (code != null)
+            {
+                filtredDiseases = filtredDiseases.Where(d => d.Code == code);
+                HttpContext.Session.SetString("DiseasesCode", code.ToString());
+                ViewData["DiseasesCode"] = code;
+            }
+            else
+            {
+                ViewData["DiseasesCode"] = HttpContext.Session.GetString("DiseasesCode");
+            }
+
+            int pageSize = 20;
+            var count = await filtredDiseases.CountAsync();
+            var items = await filtredDiseases.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            DiseaseViewModel viewModel = new DiseaseViewModel
+            {
+                PageViewModel = pageViewModel,
+                Diseases = items
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult ClearFilters()
+        {
+            HttpContext.Session.Clear();
+            ViewData["DiseasesName"] = string.Empty;
+            ViewData["DiseasesCode"] = string.Empty;
+
+            return RedirectToAction("Index");
         }
 
         // GET: Diseases/Details/5

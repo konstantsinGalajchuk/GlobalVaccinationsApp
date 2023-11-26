@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MillionTimesVaccinationsApp.Data;
 using MillionTimesVaccinationsApp.Models;
+using MillionTimesVaccinationsApp.ViewModels;
 
 namespace MillionTimesVaccinationsApp.Controllers
 {
@@ -21,11 +17,58 @@ namespace MillionTimesVaccinationsApp.Controllers
         }
 
         // GET: MessagesAfterVaccinations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? date, string doctor, int page = 1)
         {
-              return _context.MessagesAfterVaccinations != null ? 
-                          View(await _context.MessagesAfterVaccinations.ToListAsync()) :
-                          Problem("Entity set 'GlobalVaccinationsDbContext.MessagesAfterVaccinations'  is null.");
+            IQueryable<MessagesAfterVaccination> filtredMessages = _context.MessagesAfterVaccinations;
+
+            if (date != null)
+            {
+                filtredMessages = filtredMessages.Where(m => m.Date == date);
+                HttpContext.Session.SetString("MessagesDate", date.ToString());
+                DateTime dateValue = (DateTime)date;
+                ViewData["MessagesDate"] = dateValue.ToString("yyyy-MM-dd");
+            }
+            else
+            {
+                DateTime dateValue;
+                if (DateTime.TryParse(HttpContext.Session.GetString("MessagesDate"), out dateValue))
+                {
+                    ViewData["MessagesDate"] = dateValue.ToString("yyyy-MM-dd");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(doctor))
+            {
+                filtredMessages = filtredMessages.Where(m => m.Doctor == doctor);
+                HttpContext.Session.SetString("MessagesDoctor", doctor);
+                ViewData["MessagesDoctor"] = doctor;
+            }
+            else
+            {
+                ViewData["MessagesDoctor"] = HttpContext.Session.GetString("MessagesDoctor");
+            }
+
+            int pageSize = 20;
+            var count = await filtredMessages.CountAsync();
+            var items = await filtredMessages.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            MessagesAfterVaccinationViewModel viewModel = new MessagesAfterVaccinationViewModel
+            {
+                PageViewModel = pageViewModel,
+                MessagesAfterVaccinations = items
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult ClearFilters()
+        {
+            HttpContext.Session.Clear();
+            ViewData["MessagesDate"] = string.Empty;
+            ViewData["MessagesDoctor"] = string.Empty;
+
+            return RedirectToAction("Index");
         }
 
         // GET: MessagesAfterVaccinations/Details/5

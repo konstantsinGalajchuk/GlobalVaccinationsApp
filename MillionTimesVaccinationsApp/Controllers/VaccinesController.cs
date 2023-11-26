@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MillionTimesVaccinationsApp.Data;
 using MillionTimesVaccinationsApp.Models;
+using MillionTimesVaccinationsApp.ViewModels;
 
 namespace MillionTimesVaccinationsApp.Controllers
 {
@@ -21,10 +22,54 @@ namespace MillionTimesVaccinationsApp.Controllers
         }
 
         // GET: Vaccines
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? manufacturer, string? diseaseName, int page = 1)
         {
-            var globalVaccinationsDbContext = _context.Vaccines.Include(v => v.Disease);
-            return View(await globalVaccinationsDbContext.ToListAsync());
+            IQueryable<Vaccine> filtredVaccines = _context.Vaccines
+                .Include(v => v.Disease);
+
+            if (!string.IsNullOrEmpty(manufacturer))
+            {
+                filtredVaccines = filtredVaccines.Where(v => v.Manufacturer == manufacturer);
+                HttpContext.Session.SetString("VaccinesManufacturer", manufacturer);
+                ViewData["VaccinesManufacturer"] = manufacturer;
+            }
+            else
+            {
+                ViewData["VaccinesManufacturer"] = HttpContext.Session.GetString("VaccinesManufacturer");
+            }
+
+            if (!string.IsNullOrEmpty(diseaseName))
+            {
+                filtredVaccines = filtredVaccines.Where(v => v.Disease.Name == diseaseName);
+                HttpContext.Session.SetString("VaccinesDiseaseName", diseaseName.ToString());
+                ViewData["VaccinesDiseaseName"] = diseaseName;
+            }
+            else
+            {
+                ViewData["VaccinesDiseaseName"] = HttpContext.Session.GetString("VaccinesDiseaseName");
+            }
+
+            int pageSize = 20;
+            var count = await filtredVaccines.CountAsync();
+            var items = await filtredVaccines.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            VaccineViewModel viewModel = new VaccineViewModel
+            {
+                PageViewModel = pageViewModel,
+                Vaccines = items
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult ClearFilters()
+        {
+            HttpContext.Session.Clear();
+            ViewData["VaccinesManufacturer"] = string.Empty;
+            ViewData["VaccinesDiseaseName"] = string.Empty;
+
+            return RedirectToAction("Index");
         }
 
         // GET: Vaccines/Details/5
