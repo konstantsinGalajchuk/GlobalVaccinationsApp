@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Number of messages after vaccinations per year, broken down by month";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Number of messages after vaccinations per year, broken down by month</h1>
+
+<form method="get">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="year">Year</label>
+                <input value="@ViewData["Search3Year"]" type="text" class="form-control" id="year" name="year" placeholder="Year">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-primary">Apply</button>
+        <button asp-action="ClearFiltersSearch3" type="submit" class="btn btn-secondary">Clear</button>
+    </div>
+</form>
+
+<br />
+<br />
+
+<h4>December: @ViewData["Search3month1"]</h4>
+<br />
+<h4>January: @ViewData["Search3month2"]</h4>
+<br />
+<h4>February : @ViewData["Search3month3"]</h4>
+<br />
+<h4>March : @ViewData["Search3month4"]</h4>
+<br />
+<h4>April : @ViewData["Search3month5"]</h4>
+<br />
+<h4>May : @ViewData["Search3month6"]</h4>
+<br />
+<h4>June : @ViewData["Search3month7"]</h4>
+<br />
+<h4>July : @ViewData["Search3month8"]</h4>
+<br />
+<h4>August : @ViewData["Search3month9"]</h4>
+<br />
+<h4>September : @ViewData["Search3month10"]</h4>
+<br />
+<h4>October : @ViewData["Search3month11"]</h4>
+<br />
+<h4>November : @ViewData["Search3month12"]</h4>

@@ -30,6 +30,12 @@ namespace MillionTimesVaccinationsApp.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult ExtendedSearch()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

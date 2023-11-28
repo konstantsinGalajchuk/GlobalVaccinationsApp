@@ -1,0 +1,105 @@
+﻿@model MillionTimesVaccinationsApp.ViewModels.VaccinationViewModel
+
+@{
+    ViewData["Title"] = "Vaccinations according selected patient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Vaccinations according selected patient</h1>
+
+<form method="get">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="region">Patient name</label>
+                <input value="@ViewData["Search1Name"]" type="text" class="form-control" id="patientName" name="patientName" placeholder="Patient name">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-primary">Apply</button>
+        <button asp-action="ClearFiltersSearch1" type="submit" class="btn btn-secondary">Clear</button>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Dose number
+            </th>
+            <th>
+                MedicalInstitution name
+            </th>
+            <th>
+                Patient name
+            </th>
+            <th>
+                Vaccine description
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Vaccinations)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DoseNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedicalInstitution.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patient.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vaccine.Description)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a asp-route-patientName="@ViewData["Search1Name"]"
+                   asp-action="VaccinationsAccPatient" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="page-link">&laquo;</a>
+            </li>
+        }
+        @for (int i = Model.PageViewModel.PageNumber; i < Model.PageViewModel.TotalPages && i < Model.PageViewModel.PageNumber + 3; i++)
+        {
+            @if (i == Model.PageViewModel.PageNumber)
+            {
+                <li class="page-item active">
+                    <a asp-route-patientName="@ViewData["Search1Name"]"
+                       asp-action="VaccinationsAccPatient" asp-route-page="@i" class="page-link active">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a asp-route-patientName="@ViewData["Search1Name"]"
+                       asp-action="VaccinationsAccPatient" asp-route-page="@i" class="page-link">@i</a>
+                </li>
+            }
+        }
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <li class="page-item">
+                <a asp-route-patientName="@ViewData["Search1Name"]"
+                   asp-action="VaccinationsAccPatient" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="page-link">&raquo;</a>
+            </li>
+        }
+    </ul>
+</nav>
+

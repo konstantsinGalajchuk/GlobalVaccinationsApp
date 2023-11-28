@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Number of vaccinations in the selected region (city) against the selected disease";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Number of vaccinations in the selected region (city) against the selected disease</h1>
+
+<form method="get">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="region">Region</label>
+                <input value="@ViewData["Search2Region"]" type="text" class="form-control" id="region" name="region" placeholder="Region">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="city">City</label>
+                <input value="@ViewData["Search2City"]" type="text" class="form-control" id="city" name="city" placeholder="City">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="disease">Disease</label>
+                <input value="@ViewData["Search2Disease"]" type="text" class="form-control" id="disease" name="disease" placeholder="Disease">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-primary">Apply</button>
+        <button asp-action="ClearFiltersSearch2" type="submit" class="btn btn-secondary">Clear</button>
+    </div>
+</form>
+
+<br />
+<br />
+<h3>Result: @ViewData["Search2"]</h3>
