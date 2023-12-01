@@ -16,7 +16,7 @@ public partial class Vaccination
     public DateTime Date { get; set; }
 
     [Required]
-    [RegularExpression(@"^\d{1,3}$", ErrorMessage = "The 'DoseNumber' field must contain numbers only.")]
+    [RegularExpression(@"^\d{1,10}$", ErrorMessage = "The 'DoseNumber' field must contain no more than 10 digits.")]
     public int DoseNumber { get; set; }
 
     [Required]

@@ -107,11 +107,10 @@ namespace MillionTimesVaccinationsApp.Controllers
                 user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
-            await _userManager.RemoveFromRolesAsync(user, roles);
-
             if (!string.IsNullOrEmpty(model.Role))
             {
+                var roles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, roles);
                 await _userManager.AddToRoleAsync(user, model.Role);
             }
 

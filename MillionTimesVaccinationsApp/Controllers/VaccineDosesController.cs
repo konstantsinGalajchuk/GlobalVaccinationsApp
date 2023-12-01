@@ -67,8 +67,8 @@ namespace MillionTimesVaccinationsApp.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["DoseId"] = new SelectList(_context.Doses, "DoseId", "DoseId");
-            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "VaccineId");
+            ViewData["DoseId"] = new SelectList(_context.Doses, "DoseId", "Value");
+            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "Description").Take(500);
             return View();
         }
 
@@ -85,8 +85,8 @@ namespace MillionTimesVaccinationsApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoseId"] = new SelectList(_context.Doses, "DoseId", "DoseId", vaccineDose.DoseId);
-            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "VaccineId", vaccineDose.VaccineId);
+            ViewData["DoseId"] = new SelectList(_context.Doses, "DoseId", "Value", vaccineDose.DoseId);
+            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "Description", vaccineDose.VaccineId).Take(500);
             return View(vaccineDose);
         }
 
@@ -104,8 +104,8 @@ namespace MillionTimesVaccinationsApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["DoseId"] = new SelectList(_context.Doses, "DoseId", "DoseId", vaccineDose.DoseId);
-            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "VaccineId", vaccineDose.VaccineId);
+            ViewData["DoseId"] = new SelectList(_context.Doses, "DoseId", "Value", vaccineDose.DoseId);
+            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "Description", vaccineDose.VaccineId).Take(500);
             return View(vaccineDose);
         }
 
@@ -141,8 +141,8 @@ namespace MillionTimesVaccinationsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoseId"] = new SelectList(_context.Doses, "DoseId", "DoseId", vaccineDose.DoseId);
-            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "VaccineId", vaccineDose.VaccineId);
+            ViewData["DoseId"] = new SelectList(_context.Doses, "DoseId", "Value", vaccineDose.DoseId);
+            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "Description", vaccineDose.VaccineId).Take(500);
             return View(vaccineDose);
         }
 

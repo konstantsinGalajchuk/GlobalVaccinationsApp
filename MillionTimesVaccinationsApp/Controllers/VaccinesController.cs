@@ -96,7 +96,7 @@ namespace MillionTimesVaccinationsApp.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["DiseaseId"] = new SelectList(_context.Diseases, "DiseaseId", "DiseaseId");
+            ViewData["DiseaseId"] = new SelectList(_context.Diseases, "DiseaseId", "Name");
             return View();
         }
 
@@ -113,7 +113,7 @@ namespace MillionTimesVaccinationsApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DiseaseId"] = new SelectList(_context.Diseases, "DiseaseId", "DiseaseId", vaccine.DiseaseId);
+            ViewData["DiseaseId"] = new SelectList(_context.Diseases, "DiseaseId", "Name", vaccine.DiseaseId);
             return View(vaccine);
         }
 
@@ -131,7 +131,7 @@ namespace MillionTimesVaccinationsApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["DiseaseId"] = new SelectList(_context.Diseases, "DiseaseId", "DiseaseId", vaccine.DiseaseId);
+            ViewData["DiseaseId"] = new SelectList(_context.Diseases, "DiseaseId", "Name", vaccine.DiseaseId);
             return View(vaccine);
         }
 
@@ -167,7 +167,7 @@ namespace MillionTimesVaccinationsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DiseaseId"] = new SelectList(_context.Diseases, "DiseaseId", "DiseaseId", vaccine.DiseaseId);
+            ViewData["DiseaseId"] = new SelectList(_context.Diseases, "DiseaseId", "Name", vaccine.DiseaseId);
             return View(vaccine);
         }
 

@@ -10,7 +10,7 @@ public partial class Disease
     public int DiseaseId { get; set; }
 
     [Required]
-    [RegularExpression(@"^\d{1,3}$", ErrorMessage = "The 'Code' field must contain numbers only.")]
+    [RegularExpression(@"^\d{1,10}$", ErrorMessage = "The 'Code' field must contain no more than 10 digits.")]
     public int Code { get; set; }
 
     [Required]

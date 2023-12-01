@@ -118,9 +118,9 @@ namespace MillionTimesVaccinationsApp.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["MedicalInstitutionId"] = new SelectList(_context.MedicalInstitutions, "MedicalInstitutionId", "MedicalInstitutionId");
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId");
-            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "VaccineId");
+            ViewData["MedicalInstitutionId"] = new SelectList(_context.MedicalInstitutions, "MedicalInstitutionId", "Name");
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName");
+            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "Description").Take(500);
             return View();
         }
 
@@ -137,9 +137,9 @@ namespace MillionTimesVaccinationsApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MedicalInstitutionId"] = new SelectList(_context.MedicalInstitutions, "MedicalInstitutionId", "MedicalInstitutionId", vaccination.MedicalInstitutionId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", vaccination.PatientId);
-            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "VaccineId", vaccination.VaccineId);
+            ViewData["MedicalInstitutionId"] = new SelectList(_context.MedicalInstitutions, "MedicalInstitutionId", "Name", vaccination.MedicalInstitutionId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", vaccination.PatientId);
+            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "Description", vaccination.VaccineId).Take(500);
             return View(vaccination);
         }
 
@@ -157,9 +157,9 @@ namespace MillionTimesVaccinationsApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["MedicalInstitutionId"] = new SelectList(_context.MedicalInstitutions, "MedicalInstitutionId", "MedicalInstitutionId", vaccination.MedicalInstitutionId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", vaccination.PatientId);
-            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "VaccineId", vaccination.VaccineId);
+            ViewData["MedicalInstitutionId"] = new SelectList(_context.MedicalInstitutions, "MedicalInstitutionId", "Name", vaccination.MedicalInstitutionId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", vaccination.PatientId);
+            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "Description", vaccination.VaccineId).Take(500);
             return View(vaccination);
         }
 
@@ -195,9 +195,9 @@ namespace MillionTimesVaccinationsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MedicalInstitutionId"] = new SelectList(_context.MedicalInstitutions, "MedicalInstitutionId", "MedicalInstitutionId", vaccination.MedicalInstitutionId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "PatientId", vaccination.PatientId);
-            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "VaccineId", vaccination.VaccineId);
+            ViewData["MedicalInstitutionId"] = new SelectList(_context.MedicalInstitutions, "MedicalInstitutionId", "Name", vaccination.MedicalInstitutionId);
+            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "FullName", vaccination.PatientId);
+            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "VaccineId", "Description", vaccination.VaccineId).Take(500);
             return View(vaccination);
         }
 
