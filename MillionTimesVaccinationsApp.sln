@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillionTimesVaccinationsApp", "MillionTimesVaccinationsApp\MillionTimesVaccinationsApp.csproj", "{6286A426-1369-481B-A3BF-322D1DC0832B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MillionTimesVaccinationsApp", "MillionTimesVaccinationsApp\MillionTimesVaccinationsApp.csproj", "{6286A426-1369-481B-A3BF-322D1DC0832B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiagramLibrary", "DiagramLibrary\DiagramLibrary.csproj", "{B66C3EDC-E779-4803-BB2E-2C171BD2BAC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6286A426-1369-481B-A3BF-322D1DC0832B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6286A426-1369-481B-A3BF-322D1DC0832B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6286A426-1369-481B-A3BF-322D1DC0832B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B66C3EDC-E779-4803-BB2E-2C171BD2BAC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B66C3EDC-E779-4803-BB2E-2C171BD2BAC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B66C3EDC-E779-4803-BB2E-2C171BD2BAC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B66C3EDC-E779-4803-BB2E-2C171BD2BAC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

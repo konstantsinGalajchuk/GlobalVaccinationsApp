@@ -1,4 +1,9 @@
-﻿@model MillionTimesVaccinationsApp.Models.VaccineDose
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model MillionTimesVaccinationsApp.Models.VaccineDose
 
 @{
     ViewData["Title"] = "Details";
@@ -26,6 +31,9 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.VaccineDoseId">Edit</a> |
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.VaccineDoseId">Edit</a>
+    }
     <a asp-action="Index">Back to List</a>
 </div>

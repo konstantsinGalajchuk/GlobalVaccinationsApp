@@ -85,12 +85,12 @@
                 @Html.DisplayFor(modelItem => item.Vaccine.Description)
             </td>
             <td>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.VaccinationId">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.VaccinationId">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.VaccinationId">Delete</a>
-                    }
+                <a asp-action="Details" asp-route-id="@item.VaccinationId">Details</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.VaccinationId">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.VaccinationId">Delete</a>
+                }
                     
             </td>
         </tr>

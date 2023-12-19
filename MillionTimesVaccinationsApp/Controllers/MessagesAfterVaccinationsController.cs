@@ -72,7 +72,6 @@ namespace MillionTimesVaccinationsApp.Controllers
         }
 
         // GET: MessagesAfterVaccinations/Details/5
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.MessagesAfterVaccinations == null)

@@ -1,6 +1,7 @@
 ﻿using MillionTimesVaccinationsApp.Models;
+using System;
 
-namespace MillionTimesVaccinationsApp.Data
+namespace DataAccess.Data
 {
     public static class DbInitializer
     {

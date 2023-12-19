@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MillionTimesVaccinationsApp.Controllers;
-using MillionTimesVaccinationsApp.Data;
 using System.Globalization;
+using MillionTimesVaccinationsApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +26,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<UsersController>();
 
-var cultureInfo = new CultureInfo("en-US");
+var cultureInfo = new CultureInfo("ru-RU");
 cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;

@@ -61,10 +61,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                <a asp-action="Details" asp-route-id="@item.DiseaseId">Details</a>
                 @if (User.IsInRole("Admin"))
                 {
                     <a asp-action="Edit" asp-route-id="@item.DiseaseId">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.DiseaseId">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.DiseaseId">Delete</a>
                 }
             </td>
